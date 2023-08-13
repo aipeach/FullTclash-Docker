@@ -1,15 +1,12 @@
-FROM golang:alpine3.18 AS origin
+FROM golang:1.20.7-alpine AS builder
 
-WORKDIR /app
+WORKDIR /app/fulltclash-origin
 RUN apk add --no-cache git && \
-    git clone https://github.com/AirportR/FullTCore.git /app && \
+    git clone https://github.com/AirportR/FullTCore.git /app/fulltclash-origin && \
     go build -ldflags="-s -w" fulltclash.go
 
-FROM golang:1.20.7-alpine AS meta
-
-WORKDIR /app
-RUN apk add --no-cache git && \
-    git clone -b meta https://github.com/AirportR/FullTCore.git /app && \
+WORKDIR /app/fulltclash-meta
+RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-meta && \
     go build -tags with_gvisor -ldflags="-s -w" fulltclash.go
 
 
@@ -26,8 +23,8 @@ RUN apk add --no-cache \
     apk del gcc g++ make libffi-dev tzdata && \
     rm -f rm -f bin/*
 
-COPY --from=origin /app/fulltclash ./bin/fulltclash-origin
-COPY --from=meta /app/fulltclash ./bin/fulltclash-meta
+COPY --from=builder /app/fulltclash-origin/fulltclash ./bin/fulltclash-origin
+COPY --from=builder /app/fulltclash-meta/fulltclash ./bin/fulltclash-meta
 
 CMD ["main.py"]
 ENTRYPOINT ["python3"]
