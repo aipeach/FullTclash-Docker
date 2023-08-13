@@ -4,11 +4,11 @@ WORKDIR /app
 
 RUN apk add --no-cache git && \
     git clone https://github.com/AirportR/FullTCore.git /app/FullTCore-origin && \
-    cd /app/FullTCore-origin && \
+    cd /app/FullTCore-origin \
     go build -ldflags="-s -w" fulltclash.go -o fulltclash-origin
 
 RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/FullTCore-meta && \
-    cd /app/FullTCore-meta && \
+    cd /app/FullTCore-meta \
     go build -tags with_gvisor -ldflags="-s -w" fulltclash.go -o fulltclash-meta
 
 FROM python:alpine3.18
