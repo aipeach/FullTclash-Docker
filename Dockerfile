@@ -1,4 +1,4 @@
-FROM golang:1.21.0-alpine3.18 AS builder
+FROM golang:alpine3.18 AS builder
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ RUN apk add --no-cache git && \
     git clone https://github.com/AirportR/FullTCore.git /app && \
     go build -ldflags="-s -w" fulltclash.go
 
-FROM python:3.10.12-alpine3.18
+FROM python:alpine3.18
 
 WORKDIR /app
 
