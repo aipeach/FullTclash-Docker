@@ -20,6 +20,7 @@ RUN apk add --no-cache \
     pip3 install --no-cache-dir -r requirements.txt && \
     cp resources/config.yaml.example resources/config.yaml && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
     apk del gcc g++ make libffi-dev tzdata && \
     rm -f rm -f bin/*
 
