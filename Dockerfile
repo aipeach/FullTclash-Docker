@@ -7,7 +7,10 @@ RUN apk add --no-cache git && \
 
 WORKDIR /app/fulltclash-meta
 RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-meta && \
-    go build -tags with_gvisor -ldflags="-s -w" fulltclash.go
+    go build -tags with_gvisor -ldflags="-s -w" fulltclash.go && \
+    mkdir /app/FullTCore-file && \
+    cp /app/fulltclash-origin/fulltclash /app/FullTCore-file/fulltclash-origin && \
+    cp /app/fulltclash-meta/fulltclash /app/FullTCore-file/fulltclash-meta
 
 
 FROM python:alpine3.18
@@ -22,10 +25,9 @@ RUN apk add --no-cache \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     apk del gcc g++ make libffi-dev tzdata && \
-    rm -f rm -f bin/*
+    rm -f bin/*
 
-COPY --from=builder /app/fulltclash-origin/fulltclash ./bin/fulltclash-origin
-COPY --from=builder /app/fulltclash-meta/fulltclash ./bin/fulltclash-meta
+COPY --from=builder /app/FullTCore-file/* ./bin/
 
 CMD ["main.py"]
 ENTRYPOINT ["python3"]
