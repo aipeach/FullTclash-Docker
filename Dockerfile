@@ -1,4 +1,4 @@
-FROM golang:1.20.7-alpine AS builder
+FROM golang:1.20.7-alpine AS build-core
 
 WORKDIR /app/fulltclash-origin
 RUN apk add --no-cache git && \
@@ -13,21 +13,31 @@ RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-
     cp /app/fulltclash-meta/fulltclash /app/FullTCore-file/fulltclash-meta
 
 
-FROM python:alpine3.18
-
-WORKDIR /app
+FROM python:3.9.18-alpine3.18 AS compile-image
 
 RUN apk add --no-cache \
-    git gcc g++ make libffi-dev tzdata && \
+    gcc g++ make libffi-dev
+
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt
+RUN pip3 install -r requirements.txt
+
+FROM alpine:latest
+
+WORKDIR /app
+RUN apk add --no-cache \
+    git tzdata && \
     git clone -b dev https://github.com/AirportR/FullTclash.git /app && \
-    pip3 install --no-cache-dir -r requirements.txt && \
     cp resources/config.yaml.example resources/config.yaml && \
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone && \
-    apk del gcc g++ make libffi-dev tzdata && \
     rm -f bin/*
 
-COPY --from=builder /app/FullTCore-file/* ./bin/
+COPY --from=compile-image /opt/venv /opt/venv
+COPY --from=build-core /app/FullTCore-file/* ./bin/
+
+ENV TZ Asia/Shanghai
+ENV PATH="/opt/venv/bin:$PATH"
 
 CMD ["main.py"]
 ENTRYPOINT ["python3"]
