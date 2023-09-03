@@ -16,7 +16,7 @@ RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-
 FROM python:3.9.18-alpine3.18 AS compile-image
 
 RUN apk add --no-cache \
-    gcc g++ make libffi-dev
+    gcc g++ make libffi-dev libxml2-dev libxslt-dev openssl-dev musl-dev build-base rust cargo
 
 RUN python -m venv /opt/venv
 
