@@ -21,7 +21,7 @@ RUN apk add --no-cache \
 RUN python -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
-ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt
+ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt .
 RUN pip3 install -r requirements.txt
 
 FROM alpine:latest
