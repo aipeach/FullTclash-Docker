@@ -13,7 +13,16 @@ RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-
     cp /app/fulltclash-meta/fulltclash /app/FullTCore-file/fulltclash-meta
 
 
-FROM aipeach/fulltclash:env AS compile-image
+FROM python:3.9.18-alpine3.18 AS compile-image
+
+RUN apk add --no-cache \
+    gcc g++ make libffi-dev libxml2-dev libxslt-dev openssl-dev jpeg-dev musl-dev build-base rust cargo tzdata ca-certificates
+
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt .
+RUN pip3 install -r requirements.txt
 
 FROM python:3.9.18-alpine3.18
 
