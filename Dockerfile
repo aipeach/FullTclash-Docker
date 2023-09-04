@@ -13,27 +13,20 @@ RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-
     cp /app/fulltclash-meta/fulltclash /app/FullTCore-file/fulltclash-meta
 
 
-FROM python:3.9.18-alpine3.18 AS compile-image
-
-RUN apk add --no-cache \
-    gcc g++ make libffi-dev libxml2-dev libxslt-dev openssl-dev jpeg-dev musl-dev build-base rust cargo tzdata ca-certificates
-
-RUN python -m venv /opt/venv
-
-ENV PATH="/opt/venv/bin:$PATH"
-ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt .
-RUN pip3 install -r requirements.txt
+FROM aipeach/fulltclash:env AS compile-image
 
 FROM python:3.9.18-alpine3.18
 
 WORKDIR /app
 RUN apk add --no-cache \
-    git && \
+    git tzdata && \
     git clone -b dev https://github.com/AirportR/FullTclash.git /app && \
     cp resources/config.yaml.example resources/config.yaml && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk del tzdata && \
     rm -f bin/*
 
-COPY --from=compile-image /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=compile-image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=compile-image /opt/venv /opt/venv
 COPY --from=build-core /app/FullTCore-file/* ./bin/
