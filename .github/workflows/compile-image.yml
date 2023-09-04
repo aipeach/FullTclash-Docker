@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - "test"
+      - "env"
 
 jobs:
   docker:
@@ -35,4 +35,4 @@ jobs:
             linux/arm/v7
             linux/arm64/v8
           push: true
-          tags: aipeach/fulltclash:test
+          tags: aipeach/fulltclash:env
