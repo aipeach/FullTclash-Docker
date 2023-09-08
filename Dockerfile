@@ -31,7 +31,7 @@ COPY *.conf /tmp
 WORKDIR /app
 RUN apk add --no-cache \
     git tzdata curl jq bash nano && \
-    git clone -b dev https://github.com/AirportR/FullTclash.git /app && \
+    git clone -b dev --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
     cp resources/config.yaml.example resources/config.yaml && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
