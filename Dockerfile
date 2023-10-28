@@ -1,7 +1,9 @@
-FROM golang:1.20.7-alpine AS build-core
+FROM golang:1.20.7-bookworm AS build-core
 
 WORKDIR /app/fulltclash-origin
-RUN apk add --no-cache git && \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    git && \
     git clone https://github.com/AirportR/FullTCore.git /app/fulltclash-origin && \
     go build -ldflags="-s -w" fulltclash.go
 
@@ -12,40 +14,42 @@ RUN git clone -b meta https://github.com/AirportR/FullTCore.git /app/fulltclash-
     cp /app/fulltclash-origin/fulltclash /app/FullTCore-file/fulltclash-origin && \
     cp /app/fulltclash-meta/fulltclash /app/FullTCore-file/fulltclash-meta
 
+FROM python:3.9.18-slim-bookworm AS compile-image
 
-FROM python:3.9.18-alpine3.18 AS compile-image
-
-RUN apk add --no-cache \
-    gcc g++ make libffi-dev libxml2-dev libxslt-dev openssl-dev jpeg-dev musl-dev build-base rust cargo ca-certificates
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    gcc g++ make ca-certificates
 
 RUN python -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt .
-RUN pip3 install -r requirements.txt && \
-    pip3 install supervisor
+RUN pip3 install --no-cache-dir -r requirements.txt && \
+    pip3 install --no-cache-dir supervisor
 
-FROM python:3.9.18-alpine3.18
+FROM python:3.9.18-slim-bookworm
 
-COPY *.conf /tmp
 WORKDIR /app
-RUN apk add --no-cache \
-    git tzdata curl jq bash nano && \
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    git tzdata curl jq bash nano cron && \
     git clone -b dev --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
     cp resources/config.yaml.example resources/config.yaml && \
+    rm -f /etc/localtime && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone && \
-    echo "00 6 * * * bash /app/update.sh" >> /var/spool/cron/crontabs/root && \
+    echo "00 6 * * * bash /app/docker/update.sh" >> /var/spool/cron/crontabs/root && \
     mkdir /etc/supervisord.d && \
-    mv /tmp/supervisord.conf /etc/supervisord.conf && \
-    mv /tmp/fulltclash.conf /etc/supervisord.d/fulltclash.conf && \
-    rm -f bin/*
+    mv /app/docker/supervisord.conf /etc/supervisord.conf && \
+    mv /app/docker/fulltclash.conf /etc/supervisord.d/fulltclash.conf && \
+    chmod +x /app/docker/docker-entrypoint.sh && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -f /app/bin/*
 
-COPY --chmod=755 *.sh .
 COPY --from=compile-image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=compile-image /opt/venv /opt/venv
 COPY --from=build-core /app/FullTCore-file/* ./bin/
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker/docker-entrypoint.sh"]
