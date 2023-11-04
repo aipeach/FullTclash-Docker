@@ -39,7 +39,7 @@ RUN apt-get update && \
     rm -f /etc/localtime && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
-    echo "00 6 * * * bash /app/docker/update.sh" >> /var/spool/cron/crontabs/root && \
+    echo "00 6 * * * root bash /app/docker/update.sh" >> /var/spool/cron/crontabs/root && \
     mkdir /etc/supervisord.d && \
     mv /app/docker/supervisord.conf /etc/supervisord.conf && \
     mv /app/docker/fulltclash.conf /etc/supervisord.d/fulltclash.conf && \
