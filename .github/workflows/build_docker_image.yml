@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      name: Check out code
+
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Build & push Docker image
+      with:
+        image: ghcr.io/aipeach/fulltclash
+        tags: dev, latest
+        registry: ghcr.io
+        multiPlatform: true
+        platform: linux/amd64,linux/arm64
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
