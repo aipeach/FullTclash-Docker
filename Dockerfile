@@ -12,13 +12,16 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 FROM python:3.11.6-alpine3.18
 
 WORKDIR /app
-
+COPY fulltcore.sh .
 RUN apk add --no-cache \
     git tzdata && \
     git clone -b backend --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
     cp resources/config.yaml.example resources/config.yaml && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
+    chmod +x /app/fulltcore.sh && \
+    /app/fulltcore.sh && \
+    cp /app/bin/fulltclash-meta /app/bin/fulltclash-linux-amd64 && \
     apk del tzdata
 
 COPY --from=compile-image /opt/venv /opt/venv
