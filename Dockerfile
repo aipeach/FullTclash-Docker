@@ -12,7 +12,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 FROM python:3.11.6-alpine3.18
 
 WORKDIR /app
-COPY fulltcore.sh .
+COPY fulltcore.sh /app/fulltcore.sh
 RUN apk add --no-cache \
     git tzdata bash && \
     git clone -b backend --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
