@@ -5,7 +5,7 @@ cat > /app/resources/config.yaml <<EOF
 clash:
  path: './bin/fulltclash-${branch}'
  core: ${core}
- startup: 11124
+ startup: 1124
  branch: ${branch}
 EOF
 }
