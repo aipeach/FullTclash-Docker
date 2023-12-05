@@ -33,5 +33,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ github.repository_owner }}/fulltclash:backend
-            ghcr.io/${{ github.repository_owner }}/fulltclash:backend
+            ${{ github.repository_owner }}/fulltclash:ws
+            ghcr.io/${{ github.repository_owner }}/fulltclash:ws
