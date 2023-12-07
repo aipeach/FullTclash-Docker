@@ -30,10 +30,17 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ github.repository_owner }}/fulltclash:latest
-            ${{ github.repository_owner }}/fulltclash:dev
-            ghcr.io/${{ github.repository_owner }}/fulltclash:latest
-            ghcr.io/${{ github.repository_owner }}/fulltclash:dev
+            ${{ secrets.DOCKERHUB_USERNAME }}/fulltclash:dev
+      - name: Build alpine Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.alpine
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/fulltclash:alpine
