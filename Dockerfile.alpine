@@ -2,7 +2,7 @@ FROM aipeach/fulltclash:ameta AS compile-image
 
 FROM python:3.9.18-alpine3.18
 
-TZ=Asia/Shanghai
+ENV TZ=Asia/Shanghai
 ENV admin=12345678
 ENV api_id=123456
 ENV api_hash=ABCDEFG
