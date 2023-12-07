@@ -24,7 +24,7 @@ nospeed: ${nospeed}
 EOF
 
 if [ ! -z "${s5_proxy}" ]; then
-sed -i '/bot:/a\  proxy: '"${s5_proxy}" /app/resources/config.yaml
+sed -i '/bot:/a\ proxy: '"${s5_proxy}" /app/resources/config.yaml
 fi
 if [ ! -z "${http_proxy}" ]; then
   echo "proxy: ${http_proxy}" >> /app/resources/config.yaml
