@@ -1,7 +1,7 @@
 FROM python:3.9.18-alpine3.18 AS compile-image
 
 RUN apk add --no-cache \
-    gcc g++ make libffi-dev libstdc++ gcompat libgcc build-base py3-pybind11-dev abseil-cpp-dev re2-dev
+    gcc g++ make libffi-dev libstdc++ gcompat libgcc build-base py3-pybind11-dev abseil-cpp-dev re2-dev ca-certificates
 
 RUN python -m venv /opt/venv
 
@@ -41,6 +41,7 @@ RUN apk add --no-cache \
     chmod +x /app/docker/update.sh && \
     chmod +x /opt/docker-entrypoint.sh
 
+COPY --from=compile-image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=compile-image /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
