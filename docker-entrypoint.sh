@@ -8,17 +8,11 @@ bot:
  api_id: ${api_id}
  api_hash: ${api_hash}
  bot_token: ${bot_token}
-if [ ! -z "$s5_proxy" ]; then
- proxy: ${s5_proxy}
-fi
 clash:
  path: './bin/fulltclash-${branch}'
  core: ${core}
  startup: ${startup}
  branch: ${branch}
-if [ ! -z "$http_proxy" ]; then
-proxy: ${http_proxy}
-fi
 pingurl: https://www.gstatic.com/generate_204
 netflixurl: "https://www.netflix.com/title/80113701"
 speedfile:
@@ -28,6 +22,14 @@ speednodes: ${speednodes}
 speedthread: ${speedthread}
 nospeed: ${nospeed}
 EOF
+
+if [ ! -z "${s5_proxy}" ]; then
+  echo " proxy: ${s5_proxy}" >> /app/resources/config.yaml
+fi
+if [ ! -z "${http_proxy}" ]; then
+  echo "proxy: ${http_proxy}" >> /app/resources/config.yaml
+fi
+
 fi
 
 supervisord -c /etc/supervisord.conf

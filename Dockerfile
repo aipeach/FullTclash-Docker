@@ -1,15 +1,4 @@
-FROM python:3.9.18-slim-bookworm AS compile-image
-
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-    gcc g++ make ca-certificates
-
-RUN python -m venv /opt/venv
-
-ENV PATH="/opt/venv/bin:$PATH"
-ADD https://raw.githubusercontent.com/AirportR/FullTclash/dev/requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt && \
-    pip3 install --no-cache-dir supervisor
+FROM aipeach/fulltclash:dmeta AS compile-image
 
 FROM python:3.9.18-slim-bookworm
 
