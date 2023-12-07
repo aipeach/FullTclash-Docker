@@ -2,6 +2,7 @@ FROM aipeach/fulltclash:dmeta AS compile-image
 
 FROM python:3.9.18-slim-bookworm
 
+ENV TZ=Asia/Shanghai
 ENV admin=12345678
 ENV api_id=123456
 ENV api_hash=ABCDEFG
@@ -20,8 +21,9 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     git tzdata curl wget jq bash nano cron && \
     git clone -b dev --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone && \
+    git clone --single-branch --depth=1 https://github.com/twitter/twemoji.git /app/resources/emoji/twemoji && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone && \
     mkdir /etc/supervisord.d && \
     mv /app/docker/supervisord.conf /etc/supervisord.conf && \
     mv /app/docker/fulltclash.conf /etc/supervisord.d/fulltclash.conf && \
