@@ -24,7 +24,7 @@ nospeed: ${nospeed}
 EOF
 
 if [ ! -z "${s5_proxy}" ]; then
-  awk '/bot:/ {print; print " proxy: ${s5_proxy}"; next} 1' /app/resources/config.yaml > temp && mv temp /app/resources/config.yaml
+sed -i '/bot:/a\  proxy: '"${s5_proxy}" /app/resources/config.yaml
 fi
 if [ ! -z "${http_proxy}" ]; then
   echo "proxy: ${http_proxy}" >> /app/resources/config.yaml
