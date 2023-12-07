@@ -12,6 +12,17 @@ RUN pip3 install --no-cache-dir -r requirements.txt && \
 
 FROM python:3.9.18-alpine3.18
 
+ENV admin=12345678
+ENV api_id=123456
+ENV api_hash=ABCDEFG
+ENV bot_token=123456:ABCDEFG
+ENV branch=origin
+ENV core=4
+ENV startup=1124
+ENV speednodes=300
+ENV speedthread=4
+ENV nospeed=true
+
 WORKDIR /app
 COPY --chmod=755 docker-entrypoint.sh /opt/
 

@@ -13,6 +13,17 @@ RUN pip3 install --no-cache-dir -r requirements.txt && \
 
 FROM python:3.9.18-slim-bookworm
 
+ENV admin=12345678
+ENV api_id=123456
+ENV api_hash=ABCDEFG
+ENV bot_token=123456:ABCDEFG
+ENV branch=origin
+ENV core=4
+ENV startup=1124
+ENV speednodes=300
+ENV speedthread=4
+ENV nospeed=true
+
 WORKDIR /app
 COPY --chmod=755 docker-entrypoint.sh /opt/
 
@@ -20,8 +31,6 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     git tzdata curl wget jq bash nano cron && \
     git clone -b dev --single-branch --depth=1 https://github.com/AirportR/FullTclash.git /app && \
-    cp resources/config.yaml.example resources/config.yaml && \
-    rm -f /etc/localtime && \
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     mkdir /etc/supervisord.d && \
