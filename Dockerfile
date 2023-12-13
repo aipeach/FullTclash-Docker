@@ -6,6 +6,7 @@ ENV TZ=Asia/Shanghai
 ENV local=192.168.123.2/24
 ENV remote=192.168.123.1/32
 ENV through=1.2.3.4:8421
+ENV passphrase=userpass
 ENV bind=0.0.0.0:8765
 ENV token=fulltclash
 ENV branch=origin

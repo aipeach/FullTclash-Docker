@@ -10,6 +10,7 @@ services:
     metadata:
       keepAlive: true
       ttl: 10s
+      passphrase: ${passphrase}
   listener:
     type: tun
     metadata:

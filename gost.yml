@@ -1,0 +1,21 @@
+services:
+- name: tun
+  addr: :8421
+  handler:
+    type: tun
+  listener:
+    type: tun
+    auther: tun
+    metadata:
+      net: 192.168.123.1/24
+      routes:
+      - "192.168.123.2/32 192.168.123.2"
+      - "192.168.123.3/32 192.168.123.3"
+
+authers:
+- name: tun
+  auths:
+  - username: 192.168.123.2
+    password: userpass1
+  - username: 192.168.123.3
+    password: userpass2
