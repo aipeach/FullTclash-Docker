@@ -1,6 +1,6 @@
 FROM aipeach/fulltclash:dmeta AS compile-image
 
-FROM python:3.9.18-slim-bookworm
+FROM python:3.11.7-slim-bookworm
 
 ENV TZ=Asia/Shanghai
 ENV admin=12345678

@@ -1,6 +1,6 @@
 FROM aipeach/fulltclash:ameta AS compile-image
 
-FROM python:3.9.18-alpine3.18
+FROM python:3.11.7-alpine3.19
 
 ENV TZ=Asia/Shanghai
 ENV admin=12345678
