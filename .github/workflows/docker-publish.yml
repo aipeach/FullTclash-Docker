@@ -1,7 +1,9 @@
 name: backend
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - "backend"
 
 jobs:
   docker:
