@@ -1,7 +1,7 @@
 FROM aipeach/fulltclash:ameta AS compile-image
 
 
-FROM python:3.9.18-alpine3.18
+FROM python:3.11.7-alpine3.19
 
 ENV bind=0.0.0.0:8765
 ENV token=fulltclash
