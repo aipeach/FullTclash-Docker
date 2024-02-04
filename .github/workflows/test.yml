@@ -7,5 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Current Branch
-        if: ${{ github.ref_name == 'master' }}
-        run: echo ${{ github.ref_name }}
+        if: ${{ github.ref_name == 'main' }}
+        run: echo ${{ github.ref_name }} 123
+      - name: Print Current Branch
+        if: ${{ github.ref_name != 'master' }}
+        run: echo ${{ github.ref_name }} 456
