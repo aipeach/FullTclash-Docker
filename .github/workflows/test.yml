@@ -1,0 +1,10 @@
+name: Show Current Branch
+
+on: [push]
+
+jobs:
+  show-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Current Branch
+        run: echo ${{ github.ref_name }}
