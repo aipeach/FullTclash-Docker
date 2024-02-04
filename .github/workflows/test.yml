@@ -3,7 +3,7 @@ name: Show Current Branch
 on:
   push:
     paths:
-      - '/docker/test'
+      - 'docker/test'
 
 jobs:
   show-branch:
