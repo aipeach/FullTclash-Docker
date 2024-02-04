@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'docker/test'
+      - 'docker/test2'
 
 jobs:
   show-branch:
